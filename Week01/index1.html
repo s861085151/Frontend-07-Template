@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .cell {
+      width: 100px;
+      height: 100px; 
+      background-color: green;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 100px;
+      text-align: center;
+      border: 1px solid #fff;
+      font-size: 100px;
+    }
+    .willWin {
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+</body>
+<script> 
+  const pattern = [
+    [0,0,0],
+    [0,0,0],
+    [0,0,0]
+  ]
+  let color = 1
+
+  function show() {
+    const container = document.getElementById('container')
+    container.innerHTML = ''
+    for(let i=0; i<3; i++) {
+      for(let j=0; j<3; j++) {
+        const cell = document.createElement('div')
+        cell.classList.add('cell')
+        cell.innerText = pattern[i][j] === 1 ? '×' :
+          pattern[i][j] === 2 ? '○' : '' 
+        cell.addEventListener('click', () => click(i, j))
+        container.appendChild(cell)
+      }
+      container.appendChild(document.createElement('br'))
+    }
+  }
+
+  function click(x, y) {
+    if(pattern[x][y] !== 0) {     //如果已经存在棋子，就不能在落子了
+      return
+    }
+    pattern[x][y] = color
+    show()
+    setTimeout(() => {
+      if(check(pattern, color)) {   //判断胜负
+        alert(color === 1 ? '×获胜了!' : '○获胜了!')
+        return 
+      }
+      color = 3 - color
+      if(willWin(pattern, color)) {
+        console.log(color === 1 ? '×将要获胜!' : '○将要获胜!')
+      }
+    })
+  }
+
+  //判断胜负
+  function check(pattern, color) {
+    //行逻辑
+    for(let i=0; i<3; i++) {
+    let win = true
+      for(let j=0; j<3; j++) {
+        if(pattern[i][j] !== color) {
+          win = false
+        }
+      }
+      if(win) 
+        return true
+    }
+    //列逻辑
+    for(let i=0; i<3; i++) {
+      let win = true
+      for(let j=0; j<3; j++) {
+        if(pattern[j][i] !== color) {
+          win = false
+        }
+      }
+      if(win) 
+        return true
+    }
+    //左交叉
+    {
+      let win = true
+      for(let j=0; j<3; j++) {
+        if(pattern[j][2-j] !== color) {
+          win = false
+        }
+      }
+      if(win) {
+        return true
+      }
+    }
+
+    //右交叉
+    {
+      let win = true
+      for(let j=0; j<3; j++) {
+        if(pattern[j][j] !== color) {
+          win = false
+        }
+      }
+      if(win) {
+        return true
+      }
+    }
+    
+  }
+
+  //ai
+  function willWin(pattern, color) {
+    for(let i=0; i<3; i++) {
+      for(let j=0; j<3; j++) {
+        if(pattern[i][j]) continue
+        let tmp = clone(pattern)
+        tmp[i][j] = color
+        if(check(tmp, color)) {
+          document.getElementsByClassName('cell')[(i+1) * (j+1) - 1].classList.add('willWin')
+          
+          return true
+        }
+      }
+    }
+  }
+
+  //深拷贝
+  function clone(pattern) {
+    return JSON.parse(JSON.stringify(pattern))
+  }
+  show()
+
+</script>
+</html>
