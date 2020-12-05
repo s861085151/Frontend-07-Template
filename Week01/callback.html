@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>红绿灯</title>
+  <style>
+    div {
+      width: 200px;
+      height: 200px;
+      display: inline-block;
+      border-radius: 100px;
+      margin-right: 10px;
+      background-color: #ccc;
+    }
+    .green.light {
+      background-color: green;
+    }
+    .red.light {
+      background-color: red;
+    }
+    .yellow.light {
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <div class="green"></div>
+  <div class="yellow"></div>
+  <div class="red"></div>
+</body>
+<script>
+  //添加光效
+  function green() {
+    resetColor()
+    document.getElementsByClassName('green')[0].classList.add('light')
+  }
+  function red() {
+    resetColor()
+    document.getElementsByClassName('red')[0].classList.add('light')
+  }
+  function yellow() {
+    resetColor()
+    document.getElementsByClassName('yellow')[0].classList.add('light')
+  }
+  //重置灯光颜色
+  function resetColor() {
+    const lights = document.getElementsByTagName('div')
+    for(let i=0; i<3; i++) {
+      lights[i].classList.remove('light')
+    }
+  }
+  //开始
+  function go() {
+    green()
+    setTimeout(() => {
+      yellow()
+      setTimeout(() => {
+        red()
+        setTimeout(() => {
+          go()
+        }, 300)
+      },500)
+    }, 1000)
+  }
+</script>
+</html>
