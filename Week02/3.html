@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-12 21:46:12
- * @LastEditTime: 2020-12-12 22:52:57
+ * @LastEditTime: 2020-12-12 23:01:17
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /极客时间/Frontend-07-Template/Week02/2.html
@@ -42,12 +42,11 @@
   <button onclick="localStorage.removeItem('map');location.reload()">Delete</button>
 </body>
 <script>
-
- function sleep(time) {
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve, time)
-  })
- }
+  function sleep(time) {
+    return new Promise((resolve, reject) => {
+      setTimeout(resolve, time)
+    })
+  }
 
   const map = localStorage['map'] ? JSON.parse(localStorage['map']) : new Array(10000).fill(0)
   const container = document.getElementById('container')
@@ -60,13 +59,13 @@
       }
       cell.addEventListener('mousemove', () => {
         if (mousedown) {
-          if(clear) {
+          if (clear) {
             cell.style.backgroundColor = '#ccc'
           } else {
             cell.style.backgroundColor = '#000'
-             map[y * 100 + x] = 1
+            map[y * 100 + x] = 1
           }
-         
+
         }
       })
       container.appendChild(cell)
@@ -84,34 +83,45 @@
   container.addEventListener('contextmenu', e => e.preventDefault())
 
   //广度优先搜索
-  async function path(map, start, end) {
+  async function findPath(map, start, end) {
+    const table = Object.create(map)
     const queue = [start]
 
-     const insert = async(x, y) => {
+    const insert = async (x, y, pre) => {
       //如果已经存在点/到边缘 不添加 
-      if(x < 0 || x>=100 || y <0 || y>=100) {
-        return ;
+      if (x < 0 || x >= 100 || y < 0 || y >= 100) {
+        return;
       }
-      if(map[y*100 +x]) {
-        return ;
+      if (table[y * 100 + x]) {
+        return;
       }
-      // await sleep(20)
-      container.children[y*100+x].style.backgroundColor = 'lightgreen'
-      map[y*100+x] = 2
+      container.children[y * 100 + x].style.backgroundColor = 'lightgreen'
+      table[y * 100 + x] = pre
       queue.push([x, y])
     }
-    
-    while(queue.length) {
+
+    while (queue.length) {
       const [x, y] = queue.shift()
-      if(x === end[0] && y === end[1]) {
-      console.log(x, y)
-        return true
+      if (x === end[0] && y === end[1]) {
+        let path = []
+        while (x !== start[0] || y !== start[1]) {
+          path.push(map[y * 100 + x])
+          await sleep(20)
+          container.children[y * 100 + x].style.backgroundColor = 'red'
+        }
+        return path
       }
-      await insert(x -1, y)
-      await insert(x, y-1)
-      await insert(x, y+1)
-      await insert(x +1, y)
+      await insert(x - 1, y, [x, y])
+      await insert(x, y - 1, [x, y])
+      await insert(x, y + 1, [x, y])
+      await insert(x + 1, y, [x, y])
+
+      // await insert(x - 1, y - 1, [x, y])
+      // await insert(x + 1, y - 1, [x, y])
+      // await insert(x - 1, y + 1, [x, y])
+      // await insert(x + 1, y + 1, [x, y])
     }
+    return null
   }
 </script>
 
