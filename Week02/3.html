@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-12-12 21:46:12
- * @LastEditTime: 2020-12-12 23:01:17
+ * @LastEditTime: 2020-12-12 23:05:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /极客时间/Frontend-07-Template/Week02/2.html
@@ -105,8 +105,8 @@
       if (x === end[0] && y === end[1]) {
         let path = []
         while (x !== start[0] || y !== start[1]) {
-          path.push(map[y * 100 + x])
-          await sleep(20)
+          path.push(map[y * 100 + x]);
+          await sleep(20);
           container.children[y * 100 + x].style.backgroundColor = 'red'
         }
         return path
@@ -116,10 +116,10 @@
       await insert(x, y + 1, [x, y])
       await insert(x + 1, y, [x, y])
 
-      // await insert(x - 1, y - 1, [x, y])
-      // await insert(x + 1, y - 1, [x, y])
-      // await insert(x - 1, y + 1, [x, y])
-      // await insert(x + 1, y + 1, [x, y])
+      await insert(x - 1, y - 1, [x, y])
+      await insert(x + 1, y - 1, [x, y])
+      await insert(x - 1, y + 1, [x, y])
+      await insert(x + 1, y + 1, [x, y])
     }
     return null
   }
