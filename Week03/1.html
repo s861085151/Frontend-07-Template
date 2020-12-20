@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+  // \t => tab符  \r \n => 换行符 
+  const regexp = /([0-9\.]+)|([ \t]+)|([\r\n]+)|(\*)|(\/)|(\+)|(\-)/g
+
+  const dictionary = ["Number", "Whitespace", "LineTerminator", "*", "/", "+", "-"];
+
+  function tokenize(source) {
+    var reslut = null
+    while(true) {
+      reslut = regexp.exec(source);
+      if(!reslut) break;
+
+      for(var i=1; i<=dictionary.length; i++){
+        if(reslut[i]) {
+          console.log(dictionary[i-1])
+        }
+      }
+      console.log(reslut)
+    }
+  }
+  tokenize("1024 + 10 * 1")
+</script>
+</html>
