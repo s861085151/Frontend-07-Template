@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+  // \t => tab符  \r \n => 换行符 
+  const regexp = /([0-9\.]+)|([ \t]+)|([\r\n]+)|(\*)|(\/)|(\+)|(\-)/g
+
+  const dictionary = ["Number", "Whitespace", "LineTerminator", "*", "/", "+", "-"];
+
+  let source = []
+
+  function* tokenize(source) {
+    var reslut = null;
+    var lastIndex = 0
+    while (true) {
+      lastIndex = regexp.lastIndex;
+      reslut = regexp.exec(source);
+      if (!reslut) break;
+      console.log(regexp.lastIndex, lastIndex, 'lastIndex')
+      if (regexp.lastIndex - lastIndex > reslut[0].length) {
+        break;
+      }
+      let token = {
+        type: null,
+        value: null
+      }
+      for (var i = 1; i <= dictionary.length; i++) {
+        if (reslut[i]) {
+          console.log(dictionary[i - 1]);
+          token.type = dictionary[i - 1];
+        }
+      }
+      token.value = reslut[0];
+      console.log(reslut, 'reslut');
+      yield token;
+    }
+    yield {
+      type: 'EOF'
+    };
+  }
+  for (let token of tokenize("10 * 1 / 2")) {
+    //为了方便处理 所以需要把空格和换行处理掉
+    if (token.type !== 'Whitespace' && token.type !== 'LineTerminator') {
+      source.push(token);
+    }
+  }
+ 
+  console.log(source, 'source')
+
+  function MultipcativeExpression(source) {
+    if (source[0].type === 'Number') {
+      let node = {
+        type: 'MultipcativeExpression',
+        children: source[0]
+      };
+      source[0] = node;
+      return MultipcativeExpression(source)
+    }
+    if (source[0].type === 'MultipcativeExpression' && source[1] && source[1].type === '*') {
+      let node = {
+        type: 'MultipcativeExpression',
+        oprator: '*',
+        children: []
+      };
+      node.children.push(source.shift());   //number*number  所以是前三项
+      node.children.push(source.shift());
+      node.children.push(source.shift());
+      source.unshift(node); //前面的所有项都被我们弄进node中去了，所以要加在前面(number*number)/number
+      return MultipcativeExpression(source);
+    }
+
+    if (source[0].type === 'MultipcativeExpression' && source[1] && source[1].type === '/') {
+      let node = {
+        type: 'MultipcativeExpression',
+        oprator: '/',
+        children: []
+      };
+      node.children.push(source.shift()); //与乘法同理
+      node.children.push(source.shift());
+      node.children.push(source.shift());
+      source.unshift(node);
+      return MultipcativeExpression(source);
+    }
+
+    if(source[0].type === 'MultipcativeExpression') {
+      console.log(source, 'sourcesourcesource');
+      return source[0];
+    }
+    
+    return MultipcativeExpression(source);
+  }
+
+  console.log(MultipcativeExpression(source), 'MultipcativeExpression');
+</script>
+
+</html>
