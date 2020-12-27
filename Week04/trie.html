@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>字典树</title>
 </head>
+
 <body>
-  
+
 </body>
 <script>
   const $ = Symbol('$')
@@ -17,34 +19,50 @@
 
     insert(word) {
       let node = this.root
-      for(let w of word) {
-        if(!node[w]) {
+      for (let w of word) {
+        if (!node[w]) {
           node[w] = Object.create(null)
         }
-        console.log(node[w])
         node = node[w]
-        console.log(this.root)
       }
-      if(!($ in node)) {
+      if (!($ in node)) {
         node[$] = 0
       }
-      node[$] ++
+      node[$]++
+    }
+
+    // 找寻出现次数最多的字符串
+    most() {
+      let max = 0;
+      let maxWord = null;
+      const visit = (node, word) => {
+        if (node[$] && node[$] > max) {
+          max = node[$];
+          maxWord = word
+        }
+
+        for (let n in node) {
+          visit(node[n], word + n)
+        }
+      }
+
+      visit(this.root, '')
+      console.log(maxWord, max)
     }
   }
 
   function randomWord(length) {
     var s = ''
-    for(let i=0; i<length; i++) {
+    for (let i = 0; i < length; i++) {
       s += String.fromCharCode(Math.random() * 26 + "a".charCodeAt(0))
     }
     return s
   }
 
   let trie = new Trie()
-  trie.insert(randomWord(4))
-  // for(let i=0; i<10; i++) {
-  //   trie.insert(randomWord(4))
-  // }
-
+  for (let i = 0; i < 100000; i++) {
+    trie.insert(randomWord(4))
+  }
 </script>
+
 </html>
