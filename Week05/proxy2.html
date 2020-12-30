@@ -1,0 +1,58 @@
+<script>
+
+  let callbacks = new Map()
+  
+  let usedReactivties = []
+
+  let obj = {
+    a: 1,
+    b: 2
+  }
+
+  let p = reactive(obj)
+
+  effect(() => {
+    console.log(p.a)
+    console.log(p.b)
+  })
+
+  function effect(callback) {
+    usedReactivties = []
+    callback()
+    console.log(usedReactivties)
+    for(let reactivtiy of usedReactivties) {
+      if(!callbacks.has(reactivtiy[0])) {
+        callbacks.set(reactivtiy[0], new Map())
+      }
+      if(!callbacks.get(reactivtiy[0]).has(reactivtiy[1])) {
+        //这里用数组 可以执行多个effect操作
+        callbacks.get(reactivtiy[0]).set(reactivtiy[1], [])
+      }
+      callbacks.get(reactivtiy[0]).get(reactivtiy[1]).push(callback)
+    }
+    console.log(callbacks)
+  }
+  
+  function reactive(object) {
+    return new Proxy(object, {
+      set(obj, prop, val) {
+        obj[prop] = val
+        // 使用key-value格式可以精确地找到所需要执行的
+        if(callbacks.get(obj)) {
+          if(callbacks.get(obj).get(prop)) {
+            for(let callback of callbacks.get(obj).get(prop)) {
+              callback()
+            }
+          }
+        }
+        
+        return obj[prop]
+      },
+      get(obj, prop) {
+        usedReactivties.push([obj, prop])
+        return obj[prop]
+      }
+    })
+  }
+
+</script>
