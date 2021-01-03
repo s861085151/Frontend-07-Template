@@ -1,0 +1,58 @@
+<div id="container">素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素
+  素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素
+  素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素 素素</div>
+<div id="dragable" style="display: inline-block; width: 100px; height: 100px; background-color: red"></div>
+
+<script>
+  const dragable = document.getElementById('dragable')
+
+  let baseX = 0,
+    baseY = 0
+
+  dragable.addEventListener('mousedown', e => {
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const up = (e) => {
+      baseX = baseX + e.clientX - startX;
+      baseY = baseY + e.clientY - startY;
+      document.removeEventListener('mousemove', move)
+      document.removeEventListener('mouseup', up)
+    }
+
+    const move = (e) => {
+      const moveX = e.clientX;
+      const moveY = e.clientY;
+      const range = getNearest(moveX, moveY)
+      range.insertNode(dragable)
+      // dragable.style.transform = `translate(${baseX + moveX - startX}px, ${baseY + moveY - startY}px)`
+    }
+
+    document.addEventListener('mousemove', move)
+    document.addEventListener('mouseup', up)
+  })
+
+  const container = document.getElementById('container')
+  const ranges = []
+  for (let i = 0; i < container.childNodes[0].textContent.length; i++) {
+    const range = document.createRange()
+    range.setStart(container.childNodes[0], i)
+    range.setEnd(container.childNodes[0], i)
+    ranges.push(range)
+  }
+
+  function getNearest(x, y) {
+    let min = Infinity;
+    let nearest = null;
+    for (let range of ranges) {
+      let rect = range.getBoundingClientRect()
+      let distance = (rect.x - x) ** 2 + (rect.y - y) ** 2
+      if (distance < min) {
+        min = distance
+        nearest = range
+      }
+    }
+    return nearest
+  }
+
+  document.addEventListener('selectstart', e => e.preventDefault())
+</script>

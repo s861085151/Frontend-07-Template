@@ -1,3 +1,9 @@
+<input id="r" type="range" min=0 max=255 />
+<input id="g" type="range" min=0 max=255 />
+<input id="b" type="range" min=0 max=255 />
+
+<div id="color" style="width: 100px; height: 100px"></div>
+
 <script>
   let callbacks = new Map()
   let reactivties = new Map()
@@ -5,17 +11,27 @@
   let usedReactivties = []
 
   let obj = {
-    a: {
-      b: 1
-    },
-    b: 2
+    r: 0,
+    g: 0,
+    b: 0
   }
 
   let p = reactive(obj)
 
   effect(() => {
-    console.log(p.a.b)
+    document.getElementById('r').value = p.r
+    document.getElementById('g').value = p.g
+    document.getElementById('b').value = p.b
   })
+
+  document.getElementById('r').addEventListener('input', e => p.r = e.target.value)
+  document.getElementById('g').addEventListener('input', e => p.g = e.target.value)
+  document.getElementById('b').addEventListener('input', e => p.b = e.target.value)
+
+  effect(() => {
+    document.getElementById('color').style.backgroundColor = `rgb(${p.r}, ${p.g}, ${p.b})`
+  })
+
 
   function effect(callback) {
     usedReactivties = []
