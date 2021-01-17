@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Realm</title>
+  <style>
+    #main {
+      width: 100vw;
+      height: 90vh;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="main"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.0.1/dist/echarts.min.js"></script>
+<script>
+  const echarts = window.echarts
+  let myChart = echarts.init(document.getElementById('main'));
+  const data = [{
+    name: 'Realm',
+    value: 'Realm',
+    children: [{
+      name: '本地对象',
+      value: '本地对象',
+      children: [{
+        name: 'Number',
+        value: 'Number',
+        children: []
+      }, {
+        name: 'String',
+        value: 'String',
+        children: []
+      }, {
+        name: 'Boolean',
+        value: 'Boolean',
+        children: []
+      }, {
+        name: 'Object',
+        value: 'Object',
+        children: []
+      }, {
+        name: 'Array',
+        value: 'Array',
+        children: []
+      }, {
+        name: 'Date',
+        value: 'Date',
+        children: []
+      }, {
+        name: 'RegExp',
+        value: 'RegExp',
+        children: []
+      }, {
+        name: 'Error',
+        value: 'Error',
+        children: []
+      }]
+    }, {
+      name: '宿主对象',
+      value: '宿主对象',
+      children: [{
+        name: 'Window',
+        value: 'Window',
+        children: []
+      }, {
+        name: 'Document',
+        value: 'Document',
+        children: []
+      }]
+    }, {
+      name: '内置对象',
+      value: '内置对象',
+      children: [{
+        name: 'Global',
+        value: 'Global',
+        children: []
+      }, {
+        name: 'Math',
+        value: 'Math',
+        children: []
+      }]
+    }]
+  }]
+
+  const option = {
+    title: {
+      text: 'Realm',
+    },
+    tooltip: {
+      trigger: 'item',
+      triggerOn: 'mousemove'
+    },
+    series: [{
+      type: 'tree',
+      roam: true,
+      layout: 'orthogonal',
+      orient: 'LR',
+      symbol: 'emptyCircle',
+      symbolSize: 10,
+      left: 80,
+      right: 120,
+      initialTreeDepth: 5,
+      label: {
+        position: 'left',
+        verticalAlign: 'middle',
+        align: 'right',
+        fontSize: 15
+      },
+      leaves: {
+        label: {
+          position: 'right',
+          verticalAlign: 'middle',
+          align: 'left'
+        }
+      },
+      tooltip: {
+        formatter: function (params) {
+          return params.value.replace('/r/n', '<br />')
+        }
+      },
+      data
+    }]
+  };
+
+  myChart.setOption(option, true)
+</script>
+
+
+</html>
