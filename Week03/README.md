@@ -12,6 +12,6 @@
   ### 3. 当 RegExpObject <font color=red>不是一个全局正则表达式【也就是没有加g】</font>时，exec() 找到了匹配的文本，则返回一个结果数组。否则，返回 null。此数组的第 0 个元素是与正则表达式相匹配的文本，第 1 个元素是与 RegExpObject 的第 1 个子表达式相匹配的文本（如果有的话），第 2 个元素是与 RegExpObject 的第 2 个子表达式相匹配的文本（如果有的话），以此类推。除了数组元素和 length 属性之外，exec() 方法还返回两个属性。index 属性声明的是匹配文本的第一个字符的位置。input 属性则存放的是被检索的字符串 string。在调用非全局的 RegExp 对象的 exec() 方法时，返回的数组与调用方法 String.match() 返回的数组是相同的。
   ### 4. <font color=red>RegExpObject的lastIndex</font>是可以手动修改赋值的，但是要注意一个问题，如果是<font color=red>没有加g</font>的情况下, RegExpObject的lastIndex虽然已经被修改，但是是没有效果的, 如下图所示
   ---没有加g效果---
-  ![avatar](https://m.qpic.cn/psc?/V52yEmgP3QPMyz1BZO8t3HfcuX0eoV9r/bqQfVz5yrrGYSXMvKr.cqTFpYgS966AIoVrAR1eAz4f2nmTfCXVkc1S5c3pTDVIq3vU*RJUBsYFZGk8*2bZFHRqNAWWgxrzG.ETlYZr0bBk!/b&bo=kAiAAQAAAAADBzs!&rf=viewer_4)
+  ![avatar](https://m.qpic.cn/psc?/V52yEmgP3QPMyz1BZO8t3HfcuX0eoV9r/bqQfVz5yrrGYSXMvKr.cqRKUENKldQt9v7jkoauQbcA3ZPy9OlxbVwZ4IPT3ZplMCr7LCT6g0hZ.FrtyV2Ah85GBq9.jbVzkVx*xalKKYe8!/b&bo=kAiAAQAAAAADBzs!&rf=viewer_4)
   ---加g效果---
   ![avatar](https://m.qpic.cn/psc?/V52yEmgP3QPMyz1BZO8t3HfcuX0eoV9r/bqQfVz5yrrGYSXMvKr.cqQaow5KlWJTOE*7Qt4*K8gLl7d17aOX3gLITDTAfERDn4uxr7LQJo9ktoJjbKypCQ8jU8bRZSbX3lEWQ.rg1z5Y!/b&bo=xgiAAQAAAAADB20!&rf=viewer_4)
